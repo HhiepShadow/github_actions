@@ -1,0 +1,32 @@
+version: '3.7'
+services:
+  node-container:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    env_file:
+      - .env
+    ports:
+      - 3001:3001
+    networks:
+      - hh_network
+    depends_on:
+      - mongodb
+  # Mongo service
+  mongodb:
+    image: mongo:5.0
+    container_name: mongo-container
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: 'admin'
+      MONGO_INITDB_ROOT_PASSWORD: 'admin'
+    ports:
+      - 27022:27017
+    restart: "unless-stopped"
+    networks:
+      - hh_network
+    volumes:
+      - db:/data/db
+volumes:
+  db:
+networks:
+  hh_network:
